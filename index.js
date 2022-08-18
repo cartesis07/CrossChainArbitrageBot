@@ -5,7 +5,7 @@ const { ethers } = require('ethers');
 const BigNumber = require('bignumber.js');
 const Paraswap = require('./paraswap');
 
-const REST_TIME = 5 * 1000; // 5 seconds
+const REST_TIME = 10 * 1000; // 5 seconds
 const MAINNET_NETWORK_ID = 1;
 const POLYGON_NETWORK_ID = 137;
 const slippage = 0.03;
@@ -63,7 +63,7 @@ class CrossChainArbinator {
 
   async executeTx(txRequest, network) {
     const tx = await this.wallets[network].sendTransaction(txRequest);
-    return await tx.wait(); 
+    return await tx.wait();
   }
 
   async rebalance() {
@@ -130,7 +130,7 @@ class CrossChainArbinator {
       1 - slippage,
     );
 
-    // If the amount recieved in the second swap - slippage is greater than the src amount of the first swap 
+    // If the amount recieved in the second swap - slippage is greater than the src amount of the first swap
     const isArb = srcAmountFirst.lte(destAmountSecondSlippage);
     console.log(`Is Arbitrage: ${isArb}`);
     if (isArb) {
@@ -156,14 +156,14 @@ class CrossChainArbinator {
         ),
       ]);
       console.log('Executing Arbitrage');
-      
-      // Execute the transaction 
+
+      // Execute the transaction
       const txs = await Promise.all([
         this.executeTx(txRequestMainnet, MAINNET_NETWORK_ID),
         this.executeTx(txRequestPolygon, POLYGON_NETWORK_ID),
       ]);
       console.log(txs);
-      
+
       // Rebalance the portfolio if needed
       await this.rebalance();
     } else {
@@ -197,7 +197,7 @@ async function main() {
 
   const paraswap = new Paraswap();
   const bot = new CrossChainArbinator(paraswap, wallets);
-  // Let the bot make some money ;) 
+  // Let the bot make some money ;)
   await bot.alive();
 }
 
