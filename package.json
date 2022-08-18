@@ -10,7 +10,8 @@
     "axios": "0.21.1",
     "bignumber.js": "9.0.1",
     "dotenv": "10.0.0",
-    "ethers": "5.3.1"
+    "ethers": "5.3.1",
+    "pm2": "^5.2.0"
   },
   "devDependencies": {
     "husky": "6.0.0",
