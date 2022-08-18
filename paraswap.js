@@ -1,7 +1,7 @@
 const axios = require('axios');
 const BigNumber = require('bignumber.js');
 
-const ParswapURL = 'https://apiv4.paraswap.io/v2';
+const ParswapURL = 'https://apiv5.paraswap.io';
 
 // https://developers.paraswap.network/
 class Paraswap {
@@ -14,9 +14,12 @@ class Paraswap {
     // TODO: Add error handling
     try {
       const requestURL =
-        `${this.apiURL}/prices/?from=${from.address}&to=${to.address}` +
-        `&amount=${srcAmount}&fromDecimals=${from.decimals}&toDecimals` +
-        `=${to.decimals}&side=SELL&network=${network}`;
+        `${this.apiURL}/prices/?srcToken=${from.address}&destToken=${to.address}` +
+        `&amount=${srcAmount}&srcDecimals=${to.decimals}&side=SELL&network=${network}`;
+      console.log(requestURL);
+      // `${this.apiURL}/prices/?from=${from.address}&to=${to.address}` +
+      // `&amount=${srcAmount}&fromDecimals=${from.decimals}&toDecimals` +
+      // `=${to.decimals}&side=SELL&network=${network}`;
       const { data } = await axios.get(requestURL, {
         headers: {
           'X-Partner': this.referrer,
@@ -62,7 +65,7 @@ class Paraswap {
         to: data.to,
         data: data.data,
         gasLimit: '0x' + new BigNumber(data.gas).toString(16),
-        value: '0x' + new BigNumber(data.value).toString(16)
+        value: '0x' + new BigNumber(data.value).toString(16),
       };
     } catch (e) {
       throw new Error(
